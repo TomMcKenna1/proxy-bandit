@@ -1,2 +1,2 @@
 # proxy-bandit
-A fast CLI tool for all your proxy needs.
+A module for all your proxy needs.
