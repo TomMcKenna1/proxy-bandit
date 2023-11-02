@@ -1,2 +1,8 @@
+from core import Proxy
+
 class Gatherer:
-    pass
+    def __init___(self):
+        self.proxies = []
+
+    def gather(self):
+        
