@@ -64,11 +64,14 @@ class Gatherer:
         raw_sources = asyncio.run(self._gather_proxy_sources(headers=self.anti_bot_headers))
         raw_proxies = self.find_table_rows(raw_sources)
         proxy_list = {
+            # Strip the open (">") and closing ("<") tag characters
             host[1:-1]+":"+port[1:-1] 
             for raw in raw_proxies
-            if (str_raw := ''.join(str(raw).split())) and
-            (host := self.get_host(str_raw)) and 
-            (port := self.get_port(str_raw))
+            if 
+                # Remove all whitespace characters to improve consistency
+                (str_raw := ''.join(str(raw).split())) and
+                (host := self.get_host(str_raw)) and 
+                (port := self.get_port(str_raw))
         }
         print(proxy_list)
         print(len(proxy_list))
