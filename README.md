@@ -1,2 +1,2 @@
 # proxy-bandit
-A module for all your proxy needs.
+WORK IN PROGRESS: A module for all your proxy needs.
