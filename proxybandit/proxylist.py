@@ -8,6 +8,9 @@ class ProxyList():
     
     def __iter__(self):
         return iter(self._list)
+    
+    def __getitem__(self, item: int) -> Proxy:
+         return self._list[item]
 
     def to_csv(self, path):
         pass
