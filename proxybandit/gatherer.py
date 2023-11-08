@@ -8,15 +8,16 @@ from bs4 import BeautifulSoup, SoupStrainer
 # This is used as the parser for bs4
 import lxml
 
-from .core import Proxy
+from .proxy import Proxy
+from .proxylist import ProxyList
 
 class Gatherer:
 
     def __init__(self):
         base_filepath = os.path.join(os.path.dirname(__file__), 'data')
         with open(os.path.join(base_filepath, 'sources.json')) as f:
-            self.source_list = json.load(f)
-        self.anti_bot_headers = {
+            self._source_list = json.load(f)
+        self._anti_bot_headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
         }
 
@@ -27,12 +28,12 @@ class Gatherer:
     async def _gather_proxy_sources(self, **kwargs):
         async with aiohttp.ClientSession(**kwargs) as session:
             http_response_futures = []
-            for source in self.source_list:
+            for source in self._source_list:
                 http_response_futures.append(asyncio.ensure_future(self._get(session, source.get("url"))))
             html_responses = await asyncio.gather(*http_response_futures)
             return html_responses
 
-    def find_table_rows(self, raw_sources):
+    def _find_table_rows(self, raw_sources):
         table_rows = []
         soup_strainer = SoupStrainer('tbody')
         for source in raw_sources:
@@ -40,39 +41,33 @@ class Gatherer:
             table_rows += source_soup.findAll('tr')
         return table_rows
 
-    def get_host(self, raw):
-        matches = re.search(
-            r">[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}<",
-            raw,
-            flags=0
-        )
-        if matches:
-            return matches.group(0)
-        return None
-    
-    def get_port(self, raw):
-        matches = re.search(
-            r">\d{1,5}<",
-            raw,
-            flags=0
-        )
+    def _get_first_regex_match(self, raw, regex) -> str | None:
+        matches = re.search(regex, raw, flags=0)
         if matches:
             return matches.group(0)
         return None
 
-    def gather(self):
-        raw_sources = asyncio.run(self._gather_proxy_sources(headers=self.anti_bot_headers))
-        raw_proxies = self.find_table_rows(raw_sources)
-        proxy_list = {
-            # Strip the open (">") and closing ("<") tag characters
-            host[1:-1]+":"+port[1:-1] 
-            for raw in raw_proxies
-            if 
-                # Remove all whitespace characters to improve consistency
-                (str_raw := ''.join(str(raw).split())) and
-                (host := self.get_host(str_raw)) and 
-                (port := self.get_port(str_raw))
-        }
-        print(proxy_list)
-        print(len(proxy_list))
+    def _extract_proxies(self, raw_proxies) -> list[Proxy] :
+        seen = set()
+        proxy_list = []
+        for raw_proxy in raw_proxies:
+            zero_whitespace_raw_proxy = ''.join(str(raw_proxy).split())
+            host = self._get_first_regex_match(zero_whitespace_raw_proxy, r">[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}<")
+            port = self._get_first_regex_match(zero_whitespace_raw_proxy, r">\d{1,5}<")
+            if not (host and port):
+                continue
+            f_host = host[1:-1]
+            f_port = port[1:-1]
+            f_proxy = f_host + ":" + f_port
+            if f_proxy in seen:
+                continue
+            seen.add(f_proxy)
+            proxy = Proxy(Proxy.TYPE_HTTP, f_host, f_port)
+            proxy_list.append(proxy)
         return proxy_list
+
+    def gather(self):
+        raw_sources = asyncio.run(self._gather_proxy_sources(headers=self._anti_bot_headers))
+        raw_proxies = self._find_table_rows(raw_sources)
+        proxy_list = self._extract_proxies(raw_proxies)
+        return ProxyList(proxy_list)
