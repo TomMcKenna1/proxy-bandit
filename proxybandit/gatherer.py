@@ -4,7 +4,7 @@ import json
 import asyncio
 
 import aiohttp
-from bs4 import BeautifulSoup, SoupStrainer
+from bs4 import BeautifulSoup, SoupStrainer, Tag
 # This is used as the parser for bs4
 import lxml
 
@@ -13,7 +13,7 @@ from .proxylist import ProxyList
 
 class Gatherer:
 
-    def __init__(self):
+    def __init__(self) -> None:
         base_filepath = os.path.join(os.path.dirname(__file__), 'data')
         with open(os.path.join(base_filepath, 'sources.json')) as f:
             self._source_list = json.load(f)
@@ -25,7 +25,7 @@ class Gatherer:
         async with session.get(url) as http_response:
             return await http_response.read()
 
-    async def _gather_proxy_sources(self, **kwargs):
+    async def _gather_proxy_sources(self, **kwargs) -> list[bytes]:
         async with aiohttp.ClientSession(**kwargs) as session:
             http_response_futures = []
             for source in self._source_list:
@@ -33,7 +33,7 @@ class Gatherer:
             html_responses = await asyncio.gather(*http_response_futures)
             return html_responses
 
-    def _find_table_rows(self, raw_sources):
+    def _find_table_rows(self, raw_sources) -> list[Tag]:
         table_rows = []
         soup_strainer = SoupStrainer('tbody')
         for source in raw_sources:
@@ -66,7 +66,7 @@ class Gatherer:
             proxy_list.append(proxy)
         return proxy_list
 
-    def gather(self):
+    def gather(self) -> ProxyList:
         raw_sources = asyncio.run(self._gather_proxy_sources(headers=self._anti_bot_headers))
         raw_proxies = self._find_table_rows(raw_sources)
         proxy_list = self._extract_proxies(raw_proxies)
