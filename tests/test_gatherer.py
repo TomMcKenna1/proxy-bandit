@@ -1,9 +1,6 @@
-import pytest
-
 from proxybandit import Gatherer
 
-def test_gatherer():
+def test_gather():
     gatherer = Gatherer()
     proxy_list = gatherer.gather()
-    for proxy in proxy_list:
-        print(proxy)
+    assert len(proxy_list) > 0

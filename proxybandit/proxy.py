@@ -37,3 +37,6 @@ class Proxy:
         if self.type == Proxy.TYPE_HTTPS:
             proxy_dict['https'] = proxy_dict['http']
         return proxy_dict
+
+    def to_url(self) -> str:
+        return f"http://{self}"

@@ -1,8 +1,10 @@
+import csv
+
 from .proxy import Proxy
 
 class ProxyList():
 
-    def __init__(self, proxy_list):
+    def __init__(self, proxy_list: list[Proxy]):
         self._index = 0
         self._list = proxy_list
     
@@ -13,7 +15,18 @@ class ProxyList():
          return self._list[item]
 
     def to_csv(self, path):
-        pass
+        with open(path, 'w', newline='') as csvfile:
+            csv_writer = csv.writer(csvfile, delimiter=',')
+            for proxy in self._list:
+                csv_writer.writerow([
+                    proxy.id,
+                    proxy.type,
+                    proxy.host,
+                    proxy.port,
+                    proxy.privacy,
+                    proxy.origin,
+                    proxy.speed
+                ])
 
     def add(self, proxy: Proxy) -> None:
         self.list.append(proxy)
