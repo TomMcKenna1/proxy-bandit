@@ -5,14 +5,14 @@ from proxybandit import Proxy, ProxyList
 
 def test_to_csv():
     test_data = [
-        Proxy("1.1.1.1","1"),
-        Proxy("1.1.1.1","2"),
-        Proxy("1.1.1.1","3"),
+        Proxy('1.1.1.1','1'),
+        Proxy('1.1.1.1','2'),
+        Proxy('1.1.1.1','3'),
     ]
     expected_output = [
-        ["0","0","1.1.1.1","1","0","",""],
-        ["1","0","1.1.1.1","2","0","",""],
-        ["2","0","1.1.1.1","3","0","",""]
+        ['0','0','1.1.1.1','1','0','',''],
+        ['1','0','1.1.1.1','2','0','',''],
+        ['2','0','1.1.1.1','3','0','','']
     ]
     test_proxy_list = ProxyList(test_data)
     test_proxy_list.to_csv('__test_to_csv.csv')
