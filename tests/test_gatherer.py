@@ -1,5 +1,6 @@
 from proxybandit import Gatherer, ProxyList
 
+
 def test_gather():
     gatherer = Gatherer()
     proxy_list = gatherer.gather()
