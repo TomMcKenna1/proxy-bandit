@@ -13,6 +13,9 @@ class ProxyList:
 
     def __getitem__(self, item: int) -> Proxy:
         return self._list[item]
+    
+    def __len__(self) -> int:
+        return len(self._list)
 
     def to_csv(self, path):
         with open(path, "w", newline="") as csvfile:
@@ -20,7 +23,6 @@ class ProxyList:
             for proxy in self._list:
                 csv_writer.writerow(
                     [
-                        proxy.id,
                         proxy.type,
                         proxy.host,
                         proxy.port,
