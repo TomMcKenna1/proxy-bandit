@@ -13,7 +13,7 @@ class ProxyList:
 
     def __getitem__(self, item: int) -> Proxy:
         return self._list[item]
-    
+
     def __len__(self) -> int:
         return len(self._list)
 

@@ -20,7 +20,7 @@ class Tester:
                 )
             html_responses = await asyncio.gather(*http_response_futures)
             return html_responses
-        
+
     def test(self, proxy: Proxy):
         pass
 
