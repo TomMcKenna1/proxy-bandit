@@ -68,6 +68,8 @@ To use Proxy Bandit in your own project, follow the steps below:
 
 ### Examples
 
+<br />
+
 Print 10 proxies:
 ```python
 from proxybandit import ProxyBandit
@@ -77,8 +79,22 @@ proxy_bandit = ProxyBandit()
 for i in range(10):
   print(proxy_bandit.get_proxy())
 ```
+```sh
+http://50.207.199.81:80
+http://50.228.141.97:80
+http://68.185.57.66:80
+http://213.143.113.82:80
+http://50.228.141.96:80
+http://172.108.208.74:80
+http://50.227.121.36:80
+http://50.227.121.34:80
+http://50.168.72.115:80
+http://50.170.90.26:80
+```
 
-Send a requests using a proxy:
+<br />
+
+Send a request using a proxy:
 ```python
 import requests
 from proxybandit import ProxyBandit
@@ -87,6 +103,8 @@ proxy_bandit = ProxyBandit()
 proxy = proxy_bandit.get_proxy()
 res = requests.get("http://azenv.net/", proxies=proxy.to_dict())
 ```
+
+<br />
 
 Send 10 asynchronous requests using individual proxies:
 ```python
