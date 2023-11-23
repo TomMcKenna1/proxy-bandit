@@ -23,7 +23,12 @@ class Proxy:
         self.speed = speed
 
     def __str__(self):
-        return f"{self.host}:{self.port}"
+        prefix = "http://"
+        if self.type == Proxy.TYPE_HTTPS:
+            prefix = "https://"
+        elif self.type == Proxy.TYPE_SOCKS5:
+            prefix = "socks5://"
+        return f"{prefix}{self.host}:{self.port}"
 
     def to_dict(self) -> dict[str, str]:
         proxy_dict = {"http": f"http://{self}"}
