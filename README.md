@@ -42,7 +42,7 @@
 Proxy Bandit is a python module designed to simplify the gathering and utlisation of free proxies scattered online. The module easily interfaces with both python's popular `requests` and `aiohttp` modules, allowing you to send proxied requests at no cost, with little setup.
 
 **Features:**
-- Gather thousands of proxies from multiple source within seconds.
+- Gather thousands of proxies from multiple sources within seconds.
 - Add your own proxy sources via json.
 - Simple to use proxies that interface with both python requests and aiohttp.
 - Export scraped proxies to a csv file.
