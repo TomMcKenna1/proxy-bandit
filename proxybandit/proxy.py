@@ -31,12 +31,12 @@ class Proxy:
         return f"{prefix}{self.host}:{self.port}"
 
     def to_dict(self) -> dict[str, str]:
-        proxy_dict = {"http": f"http://{self}"}
+        proxy_dict = {"http": f"http://{self.host}:{self.port}"}
         if self.type == Proxy.TYPE_SOCKS5:
-            proxy_dict["http"] = f"socks5://{self}"
-            proxy_dict["https"] = f"socks5://{self}"
+            proxy_dict["http"] = str(self)
+            proxy_dict["https"] = str(self)
         if self.type == Proxy.TYPE_HTTPS:
-            proxy_dict["https"] = proxy_dict["http"]
+            proxy_dict["https"] = f"http://{self.host}:{self.port}"
         return proxy_dict
 
     def to_url(self) -> str:

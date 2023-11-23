@@ -2,16 +2,21 @@ import pytest
 
 from proxybandit import Proxy
 
-
-def test_to_string():
-    proxy = Proxy("1.1.1.1", "80")
-    expected_proxy_string = "1.1.1.1:80"
-    assert str(proxy) == expected_proxy_string
+proxy_types = [Proxy.TYPE_HTTP, Proxy.TYPE_HTTPS, Proxy.TYPE_SOCKS5]
 
 
-@pytest.mark.parametrize(
-    "proxy_type", [Proxy.TYPE_HTTP, Proxy.TYPE_HTTPS, Proxy.TYPE_SOCKS5]
-)
+@pytest.mark.parametrize("proxy_type", proxy_types)
+def test_to_string(proxy_type):
+    proxy = Proxy("1.1.1.1", "80", proxy_type)
+    expected_proxy_strings = {
+        Proxy.TYPE_HTTP: "http://1.1.1.1:80",
+        Proxy.TYPE_HTTPS: "https://1.1.1.1:80",
+        Proxy.TYPE_SOCKS5: "socks5://1.1.1.1:80",
+    }
+    assert str(proxy) == expected_proxy_strings[proxy_type]
+
+
+@pytest.mark.parametrize("proxy_type", proxy_types)
 def test_to_dict(proxy_type):
     proxy = Proxy("1.1.1.1", "80", proxy_type)
     proxy_dict = proxy.to_dict()
