@@ -122,7 +122,7 @@ async def async_get_many(url, number_of_requests) -> list[bytes]:
     async with aiohttp.ClientSession() as session:
         http_response_futures = []
         for i in range(number_of_requests):
-            // Here we get a new proxy using proxy bandit
+            # Here we get a new proxy using proxy bandit
             proxy = str(proxy_bandit.get_proxy())
             http_response_futures.append(
                 asyncio.ensure_future(async_get(session, url, proxy))
