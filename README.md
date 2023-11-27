@@ -39,7 +39,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-Proxy Bandit is a python module designed to simplify the gathering and utlisation of free proxies scattered online. The module easily interfaces with both python's popular `requests` and `aiohttp` modules, allowing you to send proxied requests at no cost, with little setup.
+Proxy Bandit is a performant python module designed to simplify the gathering and utlisation of free proxies online. The module easily interfaces with both python's popular `requests` and `aiohttp` modules, allowing you to send proxied requests at no cost, with little setup.
 
 **Features:**
 - Gather thousands of proxies from multiple sources within seconds.
@@ -114,24 +114,25 @@ from proxybandit import ProxyBandit
 
 proxy_bandit = ProxyBandit()
 
-async def async_get(session, proxy):
-    async with session.get("http://azenv.net/", proxy=proxy) as http_response:
+async def async_get(session, url, proxy):
+    async with session.get(url, proxy=proxy) as http_response:
         return await http_response.read()
 
-async def async_get_many(number_of_requests) -> list[bytes]:
+async def async_get_many(url, number_of_requests) -> list[bytes]:
     async with aiohttp.ClientSession() as session:
         http_response_futures = []
         for i in range(number_of_requests):
+            # Here we get a new proxy using proxy bandit
             proxy = str(proxy_bandit.get_proxy())
             http_response_futures.append(
-                asyncio.ensure_future(async_get(session, proxy))
+                asyncio.ensure_future(async_get(session, url, proxy))
             )
         html_responses = await asyncio.gather(*http_response_futures)
         return html_responses
 
 number_of_requests = 10
 res = asyncio.run(
-  async_get_many(number_of_requests)
+  async_get_many("http://azenv.net/", number_of_requests)
 )
 ```
 
