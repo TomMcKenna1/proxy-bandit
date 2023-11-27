@@ -12,8 +12,8 @@ class Proxy:
         port: int,
         type: int = TYPE_HTTP,
         privacy: int = PRIVACY_TRANSPARENT,
+        speed: float = 1.0,
         origin=None,
-        speed=None,
     ):
         self.type = type
         self.host = host
@@ -21,6 +21,12 @@ class Proxy:
         self.privacy = privacy
         self.origin = origin
         self.speed = speed
+
+    def __lt__(self, other):
+        return str(self) < other
+
+    def __gt__(self, other):
+        return str(self) > other
 
     def __str__(self):
         prefix = "http://"

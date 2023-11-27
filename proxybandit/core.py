@@ -1,3 +1,5 @@
+from heapq import heapify, heappush, heappop
+
 from .gatherer import Gatherer
 from .tester import Tester
 
@@ -6,13 +8,16 @@ class ProxyBandit:
     def __init__(self):
         self.gatherer = Gatherer()
         self.tester = Tester()
-        self.untested_proxy_list = self.gatherer.gather()
-        self._proxy_index = 0
+        self._unused_proxies = [
+            (proxy.speed, proxy) for proxy in self.gatherer.gather()
+        ]
+        heapify(self._unused_proxies)
+        self._used_proxies = []
 
     def get_proxy(self):
-        current_index = self._proxy_index
-        if current_index + 1 < len(self.untested_proxy_list):
-            self._proxy_index += 1
-        else:
-            self._proxy_index = 0
-        return self.untested_proxy_list[current_index]
+        if not self._unused_proxies:
+            self._unused_proxies = self._used_proxies
+            self._used_proxies = []
+        speed, proxy = heappop(self._unused_proxies)
+        heappush(self._used_proxies, (speed, proxy))
+        return proxy
