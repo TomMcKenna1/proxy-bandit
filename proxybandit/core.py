@@ -13,11 +13,7 @@ class ProxyBandit:
     def __init__(self, prioritise="speed"):
         if prioritise not in Proxy.ATTRIBUTES:
             base_error_message = f"Proxy does not have any attribute named `{prioritise}`. Please choose one of: "
-            valid_attr = [
-                f"{attribute}, " if i < len(Proxy.ATTRIBUTES) - 1 else f"{attribute}"
-                for i, attribute in enumerate(Proxy.ATTRIBUTES)
-            ]
-            raise InvalidProxyPriority(base_error_message + "".join(valid_attr))
+            raise InvalidProxyPriority(base_error_message + ", ".join(Proxy.ATTRIBUTES))
         self.gatherer = Gatherer()
         self.tester = Tester()
         self._unused_proxies = [
