@@ -5,6 +5,7 @@ class Proxy:
     TYPE_HTTP = 0
     TYPE_HTTPS = 1
     TYPE_SOCKS5 = 2
+    ATTRIBUTES = ["host", "port", "type", "privacy", "speed", "origin"]
 
     def __init__(
         self,
@@ -15,12 +16,12 @@ class Proxy:
         speed: float = 1.0,
         origin=None,
     ):
-        self.type = type
         self.host = host
         self.port = port
+        self.type = type
         self.privacy = privacy
-        self.origin = origin
         self.speed = speed
+        self.origin = origin
 
     def __lt__(self, other):
         return str(self) < other
