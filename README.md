@@ -118,7 +118,7 @@ async def async_get(session, url, proxy):
     async with session.get(url, proxy=proxy) as http_response:
         return await http_response.read()
 
-async def async_get_many(url, number_of_requests) -> list[bytes]:
+async def async_get_many(url, number_of_requests):
     async with aiohttp.ClientSession() as session:
         http_response_futures = []
         for i in range(number_of_requests):
