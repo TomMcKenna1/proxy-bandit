@@ -1,6 +1,9 @@
 <div align="center">
   <a href="https://github.com/TomMcKenna1/proxy-bandit">
-    <img src="resources/logo.png" alt="Logo" width="100" height="100">
+    <picture>
+     <source media="(prefers-color-scheme: dark)" srcset="resources/logo-dark.png">
+     <img src="resources/logo-light.png">
+    </picture>
   </a>
   <h3 align="center">proxy-bandit</h3>
 
