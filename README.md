@@ -50,6 +50,9 @@ Proxy Bandit is a performant python module designed to simplify the gathering an
 - Simple to use proxies that interface with both python requests and aiohttp.
 - Export scraped proxies to a csv file.
 
+**Requires:**
+- aiohttp
+
 <!-- GETTING STARTED -->
 ## Getting Started
 
