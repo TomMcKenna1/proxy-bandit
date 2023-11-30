@@ -109,7 +109,7 @@ res = requests.get("http://azenv.net/", proxies=proxy.to_dict())
 
 <br />
 
-Send 10 asynchronous requests using individual proxies:
+Send 10 asynchronous requests, each with their own individual proxy:
 ```python
 import aiohttp
 import asyncio
