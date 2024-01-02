@@ -13,7 +13,7 @@ class Proxy:
         port: int,
         type: int = TYPE_HTTP,
         privacy: int = PRIVACY_TRANSPARENT,
-        speed: float = 1.0,
+        speed: float = 0.0,
         origin=None,
     ):
         self.host = host

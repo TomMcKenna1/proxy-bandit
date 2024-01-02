@@ -22,8 +22,8 @@ class Gatherer:
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36"
         }
 
-    async def _get(self, session, url):
-        async with session.get(url) as http_response:
+    async def _get(self, session, **kwargs):
+        async with session.get(**kwargs) as http_response:
             return await http_response.read()
 
     async def _gather_proxy_sources(self, **kwargs) -> list[bytes]:
@@ -31,7 +31,7 @@ class Gatherer:
             http_response_futures = []
             for source in self._source_list:
                 http_response_futures.append(
-                    asyncio.ensure_future(self._get(session, source.get("url")))
+                    asyncio.ensure_future(self._get(session, url=source.get("url")))
                 )
             html_responses = await asyncio.gather(*http_response_futures)
             return html_responses
@@ -71,6 +71,18 @@ class Gatherer:
             proxy = Proxy(f_host, f_port)
             proxy_list.append(proxy)
         return proxy_list
+
+    async def _test_proxy(self, proxy_list, **kwargs) -> list[Proxy]:
+        async with aiohttp.ClientSession(**kwargs) as session:
+            http_response_futures = []
+            for proxy in proxy_list:
+                http_response_futures.append(
+                    asyncio.ensure_future(
+                        self._get(session, url="http://azenv.net/", proxy=str(proxy))
+                    )
+                )
+            html_responses = await asyncio.gather(*http_response_futures)
+            return html_responses
 
     def gather(self) -> ProxyList:
         raw_sources = asyncio.run(
