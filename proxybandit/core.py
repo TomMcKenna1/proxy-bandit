@@ -1,7 +1,6 @@
 from heapq import heapify, heappush, heappop
 
 from .gatherer import Gatherer
-from .tester import Tester
 from .proxy import Proxy
 
 
@@ -15,7 +14,6 @@ class ProxyBandit:
             base_error_message = f"Proxy does not have any attribute named `{prioritise}`. Please choose one of: "
             raise InvalidProxyPriority(base_error_message + ", ".join(Proxy.ATTRIBUTES))
         self.gatherer = Gatherer()
-        self.tester = Tester()
         self._unused_proxies = [
             (getattr(proxy, prioritise), proxy) for proxy in self.gatherer.gather()
         ]
