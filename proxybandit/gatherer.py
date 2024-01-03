@@ -23,8 +23,12 @@ class Gatherer:
         }
 
     async def _get(self, session, **kwargs):
-        async with session.get(**kwargs) as http_response:
-            return await http_response.read()
+        # Temporary try/catch to skip erroneous responses
+        try:
+            async with session.get(**kwargs) as http_response:
+                return await http_response.read()
+        except Exception as e:
+            print(f"error: {e}")
 
     async def _gather_proxy_sources(self, **kwargs) -> list[bytes]:
         async with aiohttp.ClientSession(**kwargs) as session:
@@ -72,7 +76,7 @@ class Gatherer:
             proxy_list.append(proxy)
         return proxy_list
 
-    async def _test_proxy(self, proxy_list, **kwargs) -> list[Proxy]:
+    async def _test_proxies(self, proxy_list, **kwargs):
         async with aiohttp.ClientSession(**kwargs) as session:
             http_response_futures = []
             for proxy in proxy_list:
@@ -90,4 +94,11 @@ class Gatherer:
         )
         raw_proxies = self._find_table_rows(raw_sources)
         proxy_list = self._extract_proxies(raw_proxies)
+        proxy_results = asyncio.run(
+            self._test_proxies(
+                proxy_list,
+                headers=self._anti_bot_headers,
+                timeout=aiohttp.ClientTimeout(20),
+            )
+        )
         return ProxyList(proxy_list)
