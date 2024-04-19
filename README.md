@@ -58,15 +58,16 @@ Proxy Bandit is a performant python module designed to simplify the gathering an
 
 To use Proxy Bandit in your own project, follow the steps below:
 
-1. Clone the repo
+1. Install the package through pip
    ```sh
-   git clone https://github.com/TomMcKenna1/proxy-bandit.git
+   pip install proxybandit
    ```
-2. Copy the `proxybandit` subdirectory to the root directory of your project
-    ```sh
-    cd proxy-bandit
-    cp -r proxybandit /path/to/project_root
-    ```
+2. Import the ProxyBandit class into your python file
+   ```python
+   from proxybandit import ProxyBandit
+
+   proxy_bandit = ProxyBandit()
+   ```
 
 
 <!-- USAGE EXAMPLES -->

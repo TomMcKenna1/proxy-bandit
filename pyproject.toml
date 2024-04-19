@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "proxybandit"
+version = "1.0.1"
+dependencies = [
+    "aiohttp",
+    "beautifulsoup4",
+    "lxml"
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
