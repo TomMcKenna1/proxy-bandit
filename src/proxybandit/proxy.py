@@ -1,3 +1,6 @@
+from functools import total_ordering
+
+@total_ordering
 class Proxy:
     PRIVACY_TRANSPARENT = 0
     PRIVACY_ANONYMOUS = 1
@@ -26,8 +29,8 @@ class Proxy:
     def __lt__(self, other):
         return str(self) < other
 
-    def __gt__(self, other):
-        return str(self) > other
+    def __eq__(self, other):
+        return str(self) == other
 
     def __str__(self):
         prefix = "http://"
